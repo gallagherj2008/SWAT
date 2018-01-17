@@ -1,0 +1,3 @@
+useDynLib(SWAT)
+exportPattern("^[[:alpha:]]+")
+importFrom(Rcpp, evalCpp)
