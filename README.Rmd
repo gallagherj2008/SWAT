@@ -1,0 +1,46 @@
+---
+title: "SWAT - Shortened Web-link Analysis Tool"
+author: "James Gallagher"
+date: "January 16, 2018"
+output: github_document
+keep_md: yes
+
+---
+
+
+<!-- don't edit README.md go to README.Rmd instead -->
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Basic Information
+
+1 Name: Shortened Web-Link Analytic Tool (SWAT)
+
+2 Title: SWAT ingests shortened web-link data, builds a graph network, and returns clusters of commonly accessed web domains. Additionally, the tool will generate plots geared towards describing the users based on device type, operating system, and link access time.
+
+3 Description: SWAT is intended to help provide basic understanding of the information environment of an area and is designed for use by an Information Operations planner or analyst. The basic outputs will help analysts learn more about the information access patterns (i.e. devices used, operating systems) as well as commonly accessed web domains. Incorporating tools from the iGraph, dplyr, and Matrix packages, SWAT builds graphs of co-accessed web domains and identifies clusters, also known as communities, of common co-accessed web domains. The community detection method utilized in SWAT is the Walktrap Algorithm provided in the iGraph package. The end user should have already have an understanding of the information environment of an area and use this tool to improve that understanding.
+	SWAT will consist of three tabs with each tab showing successive pieces information. The first tab will take an input of the data set. From this the data will be cleaned and Exploratory Data Analysis figures will be generated. These figures will consist of bar charts counting the number of clicks by types of device or a density plot displaying the time of each link click. The second tab will feature a line graph of modularity by filter. The user will then input a specific filter. Based on this input, another graph will populate consisting of the number of web domains in each identified cluster. By clicking on the community, a table will form underneath the plot identifying which web domains are in the community as well as how many clicks those web domains generated. The final tab will be similar to the first tab, however all of the generated plots will be generated using the filtered data of the web domains in the identified communities of tab two.
+
+4 Method of Access: Users will access SWAT from the Big Data Platform (BDP) provided through Army Cyber Command (ARCYBER).
+
+5 Security Concerns: SWAT is intended to be used at the classification of the ingested data. Currently, ARCYBER provides access to data at the UNCLASSIFIED level.
+
+6 Appearance/Design Constraints:    None currently 
+
+
+## Including Plots
+
+Feature | Description	| Priority |	Status	| Value to User	| Inputs required |	Desired Outputs |	End User Uses|	Time	| Necessity
+--------| --------| --------| --------| --------| --------| --------| --------| --------| --------| 
+Multiple-Tabs | The tool will have three tabs for navigating between the outputs | High | Not Finished | This feature clearly separates the information and indicates what information is to be placed where | None | None | No outputs given | Completed prior to deadline | Current Version
+Exploratory Data Analysis Plots| Provide basic plots on overall data set | High | Not Finished | This provides the user an overall understanding of the data and the information environment of the selected area; can be used to compare with the identified communities later | Data set, what to be plotted (hardware type, OS, time, etc) | Bar chart or Density Plot based on inputs | User will use the plots to understand the data | Completed prior to deadline | Current Version
+Filter/Modularity plot | Line Plot of community modularity score as filter level increases | High| Not Finished | Dataset | Line chart | Determine which filter level to use in future analysis | Completed prior to deadline  | Current Version
+Display web domains in communities | After filter applied, web domains are clustered based on. The remaining domains are then displayed by cluster | High | Not Finished | This is what allows the user to identify which web domains are clustered together | Dataset, desired filter level | 2 column table, 1st column is web domains, 2nd column is number of clicks from that dataset | Completed prior to deadline | Current Version
+Plots by community | This breaks down similar to the EDA of each community | Medium | Not Finished | This is what allows the analyst to build an understanding of the makeup of common users within a community | Dataset, identified communities, what to be plotted | Bar charts or density plots based on user input | Used to understand better the clusters of web domains within a dataset | Not completed prior to deadline | Future Version 
+
+
+
+
