@@ -3,30 +3,10 @@ Type: Package
 Title: SWAT Assists Analysts in Visualizing and Understanding Shortened Web Link Data.
 Version: 1.0
 Date: 2018-01-17
-Author: James Gallagher
-Maintainer: James Gallagher, james.c.gallagher@gmail.com
-Description: SWAT is intended to help provide basic understanding of the information 
-environment of an area and is designed for use by an Information Operations planner 
-or analyst. The basic outputs will help analysts learn more about the information 
-access patterns (i.e. devices used, operating systems) as well as commonly accessed 
-web domains. Incorporating tools from the iGraph, dplyr, and Matrix packages, 
-SWAT builds graphs of co-accessed web domains and identifies clusters, also known
-as communities, of common co-accessed web domains. The community detection method
-utilized in SWAT is the Walktrap Algorithm provided in the iGraph package. The end
-user should have already have an understanding of the information environment of an
-area and use this tool to improve that understanding.
-	SWAT will consist of three tabs with each tab showing successive pieces information.
-The first tab will take an input of the data set. From this the data will be cleaned 
-and Exploratory Data Analysis figures will be generated. These figures will consist
-of bar charts counting the number of clicks by types of device or a density plot 
-displaying the time of each link click. The second tab will feature a line graph
-of modularity by filter. The user will then input a specific filter. Based on this input,
-another graph will populate consisting of the number of web domains in each identified cluster.
-By clicking on the community, a table will form underneath the plot identifying which web domains
-are in the community as well as how many clicks those web domains generated. 
-The final tab will be similar to the first tab, however all of the generated 
-plots will be generated using the filtered data of the web domains in the 
-identified communities of tab two.
+#Authors@R: c(person("James","Gallagher", role = c("aut","cre"), email = "james.c.gallagher@gmail.com")
+Author: James Gallagher [aut,cre]
+Maintainer: James Gallagher <james.c.gallagher@gmail.com>
+Description: SWAT is intended to help provide basic understanding of the information environment of an area and is designed for use by an Information Operations planner or analyst. The basic outputs will help analysts learn more about the information access patterns (i.e. devices used, operating systems) as well as commonly accessed web domains. Incorporating tools from the iGraph, dplyr, and Matrix packages, SWAT builds graphs of co-accessed web domains and identifies clusters, also known as communities, of common co-accessed web domains. The community detection method utilized in SWAT is the Walktrap Algorithm provided in the iGraph package. The end user should have already have an understanding of the information environment of an area and use this tool to improve that understanding. SWAT will consist of three tabs with each tab showing successive pieces information. The first tab will take an input of the data set. From this the data will be cleaned and Exploratory Data Analysis figures will be generated. These figures will consist of bar charts counting the number of clicks by types of device or a density plot displaying the time of each link click. The second tab will feature a line graph of modularity by filter. The user will then input a specific filter. Based on this input, another graph will populate consisting of the number of web domains in each identified cluster. By clicking on the community, a table will form underneath the plot identifying which web domains are in the community as well as how many clicks those web domains generated. The final tab will be similar to the first tab, however all of the generated plots will be generated using the filtered data of the web domains in the identified communities of tab two. 
 License: GPL (>= 2)
 Imports: Rcpp (>= 0.12.7)
 LinkingTo: Rcpp
