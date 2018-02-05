@@ -19,7 +19,6 @@ test_that("pv has correct dimensions and output type", {
   expect_length(pv(FV = c(1000, 2000), 0.09, n = 5), 2)
   
   
-  
 })
 
 
