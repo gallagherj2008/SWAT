@@ -4,6 +4,8 @@ James Gallagher
 January 16, 2018
 
 <!-- don't edit README.md go to README.Rmd instead -->
+`[![Build Status](https://travis-ci.org/gallagherj2008/SWAT.svg?branch=master)](https://travis-ci.org/gallagherj2008/SWAT)`
+
 Basic Information
 -----------------
 
