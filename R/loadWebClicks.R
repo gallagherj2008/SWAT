@@ -31,9 +31,9 @@ loadWebClicks <- function(data.location) {
                     "Visibility")
   
   data[,column.names %in% nulled.names] <- NULL
-  data <- data %>% filter(Id != "Id")
+  #data <- data %>% filter(Id != "Id")
   
-  #data <- data[!data$Id=="Id",] #Remove the appended column headers from the smaller files
+  data <- data[!data$Id=="Id",] #Remove the appended column headers from the smaller files
   
   #data$OSFAMILY_OPERATINGSYSTEM <- as.factor 
   
