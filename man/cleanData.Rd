@@ -14,3 +14,6 @@ cleanData(data, matchvector)
 \value{
 datanoads a dataframe with ads removed and prepared for analysis
 }
+\description{
+This function takes a link click dataset and removes extraneous clicks directed to ads, ip addresses, etc.
+}

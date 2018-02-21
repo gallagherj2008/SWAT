@@ -1,54 +1,64 @@
 #' @title Clean web click data
 #' @name cleanData
-#'
+#' @description This function takes a link click dataset and removes extraneous clicks directed to ads, ip addresses, etc.
 #'
 #' @param data A dataframe pulled from the webclick data
 #' @param matchvector a string vector used to identify topics of link clicks
-#'
+#' 
+#' 
+#' @importFrom magrittr %>% 
+#' @importFrom dplyr filter_
+#' @importFrom dplyr mutate
+#' @importFrom lubridate duration
+#' @importFrom lubridate ymd_hms
+#' 
+#' 
 #' @return datanoads a dataframe with ads removed and prepared for analysis
 #' @export
 #'
 #' 
+
+
 cleanData <- function(data, matchvector) {
   
   datanoads <- data %>%
-    dplyr::filter(AUTHORITY_URI != "t.co") %>% 
-    dplyr::filter(AUTHORITY_URI != "jamdex.com") %>%  
-    dplyr::filter(AUTHORITY_URI != "awesome-cool-music.blogspot.com") %>% 
-    dplyr::filter(AUTHORITY_URI != "greatmusicstreaming.blogspot.com") %>% 
-    dplyr::filter(AUTHORITY_URI != "n2adshostnet.com") %>% 
-    dplyr::filter(AUTHORITY_URI != "prpops.com") %>% 
-    dplyr::filter(AUTHORITY_URI != "best-streaming-music.blogspot.com") %>% 
-    dplyr::filter(AUTHORITY_URI != "www.dropbox.com") %>% 
-    dplyr::filter(AUTHORITY_URI != "static-v2.astar.mobi") %>% 
-    dplyr::filter(AUTHORITY_URI != "dl.dropboxusercontent.com") %>% 
-    dplyr::filter(AUTHORITY_URI != "interactive.tegna-media.com") %>% 
-    dplyr::filter(!AUTHORITY_URI %in% grep(pattern = "adf.ly", x = data$AUTHORITY_URI, value = T)) %>% 
-    dplyr::filter(!AUTHORITY_URI %in% grep(pattern = "getgiftcards.org", x = data$AUTHORITY_URI, value = T)) %>% 
-    dplyr::filter(!AUTHORITY_URI %in% grep(pattern = "weebly.com", x = data$AUTHORITY_URI, value = T)) %>% 
-    dplyr::filter(!AUTHORITY_URI %in% grep(pattern = "$<U.*", x = data$AUTHORITY_URI, value = T)) %>% 
-    dplyr::filter(!AUTHORITY_URI %in% grep(pattern = "myautodj.com", x = data$AUTHORITY_URI, value = T)) %>% 
-    dplyr::filter(!AUTHORITY_URI %in% grep(pattern = "rackcdn.com", x = data$AUTHORITY_URI, value = T)) %>% 
-    dplyr::filter(!AUTHORITY_URI %in% grep(pattern = "voluumtrk.com", x = data$AUTHORITY_URI, value = T)) %>% 
-    dplyr::filter(!AUTHORITY_URI %in% grep(pattern = "blogspot.com", x = data$AUTHORITY_URI, value = T)) %>% 
-    dplyr::filter(!AUTHORITY_URI %in% grep(pattern = "api.", x = data$AUTHORITY_URI, value = T)) %>% 
-    dplyr::filter(!AUTHORITY_URI %in% grep(pattern = "click.", x = data$AUTHORITY_URI, value = T)) %>% 
-    dplyr::filter(!AUTHORITY_URI %in% grep(pattern = "ad.doubleclick", x = data$AUTHORITY_URI, value = T)) %>% 
-    dplyr::filter(!AUTHORITY_URI %in% grep(pattern = "yakidee.org", x = data$AUTHORITY_URI, value = T)) %>% 
-    dplyr::filter(!AUTHORITY_URI %in% grep(pattern = "app.", x = data$AUTHORITY_URI, value = T)) %>% 
-    dplyr::filter(!AUTHORITY_URI %in% grep(pattern = "[[:digit:]]{,3}[[:punct:]]{,1}[[:digit:]]{,3}[[:punct:]]{,1}[[:digit:]]{,3}[[:punct:]]{,1}[[:digit:]]{,3}", x = data$AUTHORITY_URI, value = T)) %>% 
-    dplyr::filter(!AUTHORITY_URI_REFERRER %in% grep(pattern =  "[[:digit:]]{,3}[[:punct:]]{,1}[[:digit:]]{,3}[[:punct:]]{,1}[[:digit:]]{,3}[[:punct:]]{,1}[[:digit:]]{,3}", x = data$AUTHORITY_URI_REFERRER, value = T)) %>% 
-    dplyr::filter(!AUTHORITY_URI_REFERRER %in% c("video-promo.net","aptrk.com","www.IsraeLIVE.org","watchonlinevideos.org"))
+    dplyr::filter_("AUTHORITY_URI" != "t.co") %>% 
+    dplyr::filter_("AUTHORITY_URI" != "jamdex.com") %>%  
+    dplyr::filter_("AUTHORITY_URI" != "awesome-cool-music.blogspot.com") %>% 
+    dplyr::filter_("AUTHORITY_URI" != "greatmusicstreaming.blogspot.com") %>% 
+    dplyr::filter_("AUTHORITY_URI" != "n2adshostnet.com") %>% 
+    dplyr::filter_("AUTHORITY_URI" != "prpops.com") %>% 
+    dplyr::filter_("AUTHORITY_URI" != "best-streaming-music.blogspot.com") %>% 
+    dplyr::filter_("AUTHORITY_URI" != "www.dropbox.com") %>% 
+    dplyr::filter_("AUTHORITY_URI" != "static-v2.astar.mobi") %>% 
+    dplyr::filter_("AUTHORITY_URI" != "dl.dropboxusercontent.com") %>% 
+    dplyr::filter_("AUTHORITY_URI" != "interactive.tegna-media.com") %>% 
+    dplyr::filter_(!"AUTHORITY_URI" %in% grep(pattern = "adf.ly", x = data$AUTHORITY_URI, value = T)) %>% 
+    dplyr::filter_(!"AUTHORITY_URI" %in% grep(pattern = "getgiftcards.org", x = data$AUTHORITY_URI, value = T)) %>% 
+    dplyr::filter_(!"AUTHORITY_URI" %in% grep(pattern = "weebly.com", x = data$AUTHORITY_URI, value = T)) %>% 
+    dplyr::filter_(!"AUTHORITY_URI" %in% grep(pattern = "$<U.*", x = data$AUTHORITY_URI, value = T)) %>% 
+    dplyr::filter_(!"AUTHORITY_URI" %in% grep(pattern = "myautodj.com", x = data$AUTHORITY_URI, value = T)) %>% 
+    dplyr::filter_(!"AUTHORITY_URI" %in% grep(pattern = "rackcdn.com", x = data$AUTHORITY_URI, value = T)) %>% 
+    dplyr::filter_(!"AUTHORITY_URI" %in% grep(pattern = "voluumtrk.com", x = data$AUTHORITY_URI, value = T)) %>% 
+    dplyr::filter_(!"AUTHORITY_URI" %in% grep(pattern = "blogspot.com", x = data$AUTHORITY_URI, value = T)) %>% 
+    dplyr::filter_(!"AUTHORITY_URI" %in% grep(pattern = "api.", x = data$AUTHORITY_URI, value = T)) %>% 
+    dplyr::filter_(!"AUTHORITY_URI" %in% grep(pattern = "click.", x = data$AUTHORITY_URI, value = T)) %>% 
+    dplyr::filter_(!"AUTHORITY_URI" %in% grep(pattern = "ad.doubleclick", x = data$AUTHORITY_URI, value = T)) %>% 
+    dplyr::filter_(!"AUTHORITY_URI" %in% grep(pattern = "yakidee.org", x = data$AUTHORITY_URI, value = T)) %>% 
+    dplyr::filter_(!"AUTHORITY_URI" %in% grep(pattern = "app.", x = data$AUTHORITY_URI, value = T)) %>% 
+    dplyr::filter_(!"AUTHORITY_URI" %in% grep(pattern = "[[:digit:]]{,3}[[:punct:]]{,1}[[:digit:]]{,3}[[:punct:]]{,1}[[:digit:]]{,3}[[:punct:]]{,1}[[:digit:]]{,3}", x = data$AUTHORITY_URI, value = T)) %>% 
+    dplyr::filter_(!"AUTHORITY_URI_REFERRER" %in% grep(pattern =  "[[:digit:]]{,3}[[:punct:]]{,1}[[:digit:]]{,3}[[:punct:]]{,1}[[:digit:]]{,3}[[:punct:]]{,1}[[:digit:]]{,3}", x = data$AUTHORITY_URI_REFERRER, value = T)) %>% 
+    dplyr::filter_(!"AUTHORITY_URI_REFERRER" %in% c("video-promo.net","aptrk.com","www.IsraeLIVE.org","watchonlinevideos.org"))
   
   
 
   datanoads <- datanoads %>% 
-    dplyr::mutate(referrer = ifelse(AUTHORITY_URI_REFERRER %in% grep(pattern = "facebook", x = datanoads$AUTHORITY_URI_REFERRER, value = T), "Facebook",
-                             ifelse(AUTHORITY_URI_REFERRER %in% grep(pattern = "t.co", x = datanoads$AUTHORITY_URI_REFERRER, value = T), "Twitter",
-                                    ifelse(AUTHORITY_URI_REFERRER %in% grep(pattern = "Direct", x = datanoads$AUTHORITY_URI_REFERRER, value = T), "direct",
-                                           ifelse(is.na(AUTHORITY_URI_REFERRER), "Unknown","Website"))))) %>% 
+    dplyr::mutate_(referrer = ifelse("AUTHORITY_URI_REFERRER" %in% grep(pattern = "facebook", x = datanoads$AUTHORITY_URI_REFERRER, value = T), "Facebook",
+                             ifelse("AUTHORITY_URI_REFERRER" %in% grep(pattern = "t.co", x = datanoads$AUTHORITY_URI_REFERRER, value = T), "Twitter",
+                                    ifelse("AUTHORITY_URI_REFERRER" %in% grep(pattern = "Direct", x = datanoads$AUTHORITY_URI_REFERRER, value = T), "direct",
+                                           ifelse(is.na("AUTHORITY_URI_REFERRER"), "Unknown","Website"))))) %>% 
     
-   dplyr::mutate(topicrelated = ifelse(URL_REQUEST %in% grep(pattern = paste(matchvector, collapse = "|"), value = T, x = datanoads$URL_REQUEST), "Yes", "No"))
+   dplyr::mutate(topicrelated = ifelse("URL_REQUEST" %in% grep(pattern = paste(matchvector, collapse = "|"), value = T, x = datanoads$URL_REQUEST), "Yes", "No"))
   
   
   datanoads <- datanoads %>% dplyr::as_tibble()

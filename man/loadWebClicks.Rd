@@ -12,3 +12,6 @@ loadWebClicks(data.location)
 \value{
 A DataFrame consisting of the important columns from the web click data
 }
+\description{
+This function imports a .csv for link clicks and returns it as a data_frame
+}

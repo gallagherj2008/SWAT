@@ -1,9 +1,11 @@
 
 #' @title Load in Web Click Data
 #' @name loadWebClicks
-#'
+#' @description This function imports a .csv for link clicks and returns it as a data_frame
 #' @param data.location String File location name
-#'
+#' 
+#' @importFrom readr read_csv
+#' 
 #' @return A DataFrame consisting of the important columns from the web click data
 #' @export
 #'

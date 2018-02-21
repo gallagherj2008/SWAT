@@ -4,7 +4,10 @@
 #'
 #' @param app_name character string for the package you want to run  
 #' @param ... Additional options pased to shinyAppDir
-#'
+#' 
+#' 
+#' @importFrom shiny shinyAppDir
+#' 
 #' @return A printed shiny app
 #' @export
 
