@@ -1,2 +1,7 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
+.travis.yml
+^.*\inst\data
+^.*\src\*.o
+^.*\src\*.dll
+^.*\README.Rmd
