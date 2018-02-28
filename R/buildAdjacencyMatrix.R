@@ -18,7 +18,8 @@
 #'
 #' 
 #' 
-#' 
+#'
+#'  
 buildAdjacencyMatrix <- function(data) {
   
   #Remove web domains with 1 click
@@ -29,11 +30,11 @@ buildAdjacencyMatrix <- function(data) {
   
   #create the unique user ids
   data <- data %>% dplyr::mutate(UserID = paste(data$HTTPUSERAGENT, data$LATITUDE_SRC, data$LONGITUDE_SRC, sep = "_"))
-  data$UserID <- data$UserID %>% base::as.factor %>% base::as.numeric
+  data$UserID <- as.numeric(as.factor(data$UserID)) # %>% base::as.factor %>% base::as.numeric
 
   
   #Build the bipartite graph
-  g1 <- data[,c("UserID","AUTHORITY_URI")] %>% Matrix::as.matrix %>% igraph::graph_from_edgelist(directed = F)
+  g1 <- igraph::graph_from_edgelist(Matrix::as.matrix(data[,c("UserID","AUTHORITY_URI")]), directed = F) #%>% Matrix::as.matrix %>% igraph::graph_from_edgelist(directed = F)
   #pull out the adjacency matrix
   adjacency.matrix <- igraph::get.adjacency(g1, type = "both", sparse = T)
   

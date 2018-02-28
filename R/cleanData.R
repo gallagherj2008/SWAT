@@ -53,12 +53,12 @@ cleanData <- function(data, matchvector) {
   
 
   datanoads <- datanoads %>%
-    dplyr::mutate(referrer = ifelse(data$AUTHORITY_URI_REFERRER %in% grep(pattern = "facebook", x = datanoads$AUTHORITY_URI_REFERRER, value = T), "Facebook",
-                             ifelse(data$AUTHORITY_URI_REFERRER %in% grep(pattern = "t.co", x = datanoads$AUTHORITY_URI_REFERRER, value = T), "Twitter",
-                                    ifelse(data$AUTHORITY_URI_REFERRER %in% grep(pattern = "Direct", x = datanoads$AUTHORITY_URI_REFERRER, value = T), "direct",
-                                           ifelse(is.na(data$AUTHORITY_URI_REFERRER), "Unknown","Website"))))) %>%
+    dplyr::mutate(referrer = ifelse(datanoads$AUTHORITY_URI_REFERRER %in% grep(pattern = "facebook", x = datanoads$AUTHORITY_URI_REFERRER, value = T), "Facebook",
+                             ifelse(datanoads$AUTHORITY_URI_REFERRER %in% grep(pattern = "t.co", x = datanoads$AUTHORITY_URI_REFERRER, value = T), "Twitter",
+                                    ifelse(datanoads$AUTHORITY_URI_REFERRER %in% grep(pattern = "Direct", x = datanoads$AUTHORITY_URI_REFERRER, value = T), "direct",
+                                           ifelse(is.na(datanoads$AUTHORITY_URI_REFERRER), "Unknown","Website"))))) %>%
 
-  dplyr::mutate(topicrelated = ifelse(data$URL_REQUEST %in% grep(pattern = paste(matchvector, collapse = "|"), value = T, x = datanoads$URL_REQUEST), "Yes", "No"))
+  dplyr::mutate(topicrelated = ifelse(datanoads$URL_REQUEST %in% grep(pattern = paste(matchvector, collapse = "|"), value = T, x = datanoads$URL_REQUEST), "Yes", "No"))
   
   
   datanoads <- datanoads %>% dplyr::as_tibble()

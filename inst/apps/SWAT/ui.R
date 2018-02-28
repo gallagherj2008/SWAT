@@ -10,13 +10,8 @@ ui <- fluidPage(title = 'Shortened web Link Analysis Tool',
                                                             "text/comma-separated-values,text/plain",
                                                             ".csv")),
                                        tags$hr(),
-                                       checkboxInput("header", "Header", T),
-                                       radioButtons("sep","Separator",
-                                                    choices = c(Comma = ",",
-                                                                Semicolon = ";",
-                                                                Tab = "\t"),
-                                                    selected = ","),
-                                       actionButton("do", "Pre-Process Data"),
+                                       actionButton("process", "Input and Clean Data"),
+                                       tags$hr(),
                                        dataTableOutput('table')),
                               tabPanel(title = 'Exploratory Data Analysis',
                                        selectInput("plotcolumn",
@@ -40,7 +35,10 @@ ui <- fluidPage(title = 'Shortened web Link Analysis Tool',
                                                    label = "Filter out low levels",
                                                    min = 0, max = 5000, step = 500, value = 500),
                                        plotOutput('barchart'),
-                                       plotOutput('densityplot'))
+                                       plotOutput('densityplot')),
+                              tabPanel(title = "Community Detection",
+                                       actionButton("community", "Conduct Community Detection"),
+                                       plotOutput('modularity'))
                               
                               
                               )))
