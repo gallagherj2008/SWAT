@@ -16,7 +16,7 @@
 #' 
 #' @export
 #'
-#' @examples
+#' 
 #' 
 #' 
 buildAdjacencyMatrix <- function(data) {
@@ -28,7 +28,7 @@ buildAdjacencyMatrix <- function(data) {
   data <- data[!data$HTTPUSERAGENT %>% is.na,]
   
   #create the unique user ids
-  data <- data %>% dplyr::mutate(UserID = paste(HTTPUSERAGENT,LATITUDE_SRC,LONGITUDE_SRC, sep = "_"))
+  data <- data %>% dplyr::mutate(UserID = paste(data$HTTPUSERAGENT, data$LATITUDE_SRC, data$LONGITUDE_SRC, sep = "_"))
   data$UserID <- data$UserID %>% base::as.factor %>% base::as.numeric
 
   

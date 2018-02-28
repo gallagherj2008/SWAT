@@ -18,7 +18,3 @@ This function takes as input a column that has user information and location sou
 \details{
 Build the Adjacency matrix
 }
-\examples{
-
-
-}
