@@ -8,7 +8,7 @@
 #' @importFrom magrittr %>% 
 #' @return a vector from 1:n of weights
 #' 
-#'
+#' @export
 #' 
 sparseToMatrix <- function(x) {
   
@@ -26,11 +26,11 @@ return(Matrix)
 #' @importFrom magrittr %>% 
 #' @return A vector of the top n highest entries
 #' 
-#'
+#' @export
 #' 
 getTopNvalues <- function(x, n = 3) {
   
-  matrix <- SWAT:::sparseToMatrix(x)
+  matrix <- SWAT::sparseToMatrix(x)
   
   values <- matrix[,"x"] %>% sort(decreasing = T)
   values <- values[1:n]

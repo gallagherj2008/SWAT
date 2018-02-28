@@ -9,20 +9,20 @@
 #' 
 #' @return a filtered sparse Copurchase matrix
 #' @import Matrix
-#' @import dplyr
+#' @importFrom dplyr filter_
 #' @importFrom magrittr %>% 
 #'
-#' 
+#' @export
 filterCopurchaseMatrix <- function(copurchase.matrix, n = 3, filterlevel = 0.05){
   
-  filtervalue <- SWAT:::getTopNvalues(copurchase.matrix) %>% mean()*filterlevel
+  filtervalue <- SWAT::getTopNvalues(copurchase.matrix) %>% mean()*filterlevel
   
 
   websites <- rownames(copurchase.matrix)
   
-  mat <- SWAT:::sparseToMatrix(copurchase.matrix) %>% as.data.frame
+  mat <- SWAT::sparseToMatrix(copurchase.matrix) %>% as.data.frame
   
-  mat <- mat %>% dplyr::filter(x > filtervalue)
+  mat <- mat %>% dplyr::filter_("x" > filtervalue)
 
   
    filteredcopurchase <- Matrix::sparseMatrix(i = mat[,1], j = mat[,2], x = mat[,3], dims = c(length(websites),length(websites)))

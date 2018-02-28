@@ -2,7 +2,7 @@
 #' @name getCommunities
 #' @description This function imports a copurchase matrix, usually after filtering, and builds a graph and conducts community detection on the graph using the walktrap method. It then returns that walktrap object
 #'
-#' @param copurchase.matrix 
+#' @param copurchase.matrix a sparse nxn matrix connecting web domains by common users which will be turned into a graph for community detection
 #'
 #' @return community.walktrap An igraph object containing community definitions for each web domain
 #' @export
