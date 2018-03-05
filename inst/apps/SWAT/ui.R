@@ -34,11 +34,19 @@ ui <- fluidPage(title = 'Shortened web Link Analysis Tool',
                                        sliderInput("filterlevel",
                                                    label = "Filter out low levels",
                                                    min = 0, max = 5000, step = 500, value = 500),
+                                       sliderInput("agefilter",
+                                                   label = "Max Link Age to show (in days)",
+                                                   min = 1, max = 5, step = 1, value = 2),
                                        plotOutput('barchart'),
                                        plotOutput('densityplot')),
                               tabPanel(title = "Community Detection",
                                        actionButton("community", "Conduct Community Detection"),
-                                       plotOutput('modularity'))
+                                       fluidRow(
+                                         column(12, plotOutput('modularity')),
+                                         column(12, plotOutput('numcommunities')))
                               
                               
-                              )))
+                              )
+                              )
+                         )
+)

@@ -3,7 +3,8 @@ server <- function(input, output, session) {
   rv <- reactiveValues()
 
   observeEvent({
-    input$process}, {
+    input$process},
+    {
       rv$clicks <- SWAT::loadWebClicks(input$file1$datapath)
       #licks <- as.data.frame(rv$clicks)
       #stopApp(rv$clicks)
@@ -36,17 +37,7 @@ server <- function(input, output, session) {
   })
   
   
-    output$table <- renderDataTable({
-    
-    # observe({ 
-    #   rv$clicks <- SWAT::loadWebClicks(input$file1$datapath)
-    #   #rv$clicks <- as.data.frame(rv$clicks)
-    #   #clicks$DURATION_FROMCLICKTOCREATION <-as.numeric((lubridate::as.duration(clicks$DURATION_FROMCLICKTOCREATION))/lubridate::dhours(x = 1)) 
-    #   #rv$clicks <- SWAT::cleanData(rv$clicks, matchvector = termstomatch)
-    # }, suspended = T)
-    
-    
-
+  output$table <- renderDataTable({
 
     rv$clicks
 
@@ -82,14 +73,36 @@ server <- function(input, output, session) {
 
 
   } else {
-
-    observe({rv$selecteddata <- rv$clicks[rv$clicks[,input$fillcolumn] %in% (names(which(table(rv$clicks[,input$fillcolumn]) > input$filterlevel))),
+    
+    #updateSliderInput(session, "agefilter", max = round(max(rv$selecteddata$DURATION_FROMCLICKTOCREATION),digits = 0), step = 24, min = 1)
+    
+    observe({rv$selecteddata1 <- rv$clicks[rv$clicks[,input$fillcolumn] %in% (names(which(table(rv$clicks[,input$fillcolumn]) > input$filterlevel))),
                                  c("referrer",
                                    "VENDORNAME_OPERATINGSYSTEM",
                                    "TYPE_HARDWAREPLATFORM",
                                    "DURATION_FROMCLICKTOCREATION",
                                    "TIME_CLICKED")]
+    
+    #rv$selecteddata <- rv$selecteddata1[rv$selecteddata1[, input$plotcolumn] < input$agefilter, ]
+    
     })
+    
+    if (input$plotcolumn == "DURATION_FROMCLICKTOCREATION") {
+
+    observe({
+      rv$selecteddata <- rv$selecteddata1[rv$selecteddata1[,input$plotcolumn] < input$agefilter*24, ]
+
+    })
+
+      #stopApp(rv$selecteddata$DURATION_FROMCLICKTOCREATION)
+    }
+      
+    else {
+      
+      rv$selecteddata <- rv$selecteddata1
+      
+    }
+    
     p <- ggplot2::ggplot(data = rv$selecteddata, aes_string(x = input$plotcolumn))
     p <- p + ggplot2::geom_density(aes_string(group = input$fillcolumn, color = input$fillcolumn))
     print(p)
@@ -99,8 +112,7 @@ server <- function(input, output, session) {
 
   }
   })
-  
-  
+
   output$modularity <- renderPlot({
     
     
@@ -108,33 +120,31 @@ server <- function(input, output, session) {
       #stopApp(rv$iteratedresults)
     c <-  ggplot2::ggplot(data = rv$iterated.results) + ggplot2::geom_line(aes_string(x = "Filter_Level", y = "Modularity"), size = 1.3) +
       ggplot2::ggtitle("Community Modularity Score as Filter Changes") +
-      ggplot2::scale_x_continuous(breaks = filters, labels = filters)
+      ggplot2::scale_x_continuous(breaks = filters, labels = filters) +
+      ggthemes::theme_economist_white(base_size = 14)
     
     print(c)
     
     }  
     
-    else {
-      
-      observe({rv$selecteddata <- rv$clicks[rv$clicks[,"referrer"] %in% (names(which(table(rv$clicks[,"referrer"]) > 1000))),
-                                            c("referrer",
-                                              "VENDORNAME_OPERATINGSYSTEM",
-                                              "TYPE_HARDWAREPLATFORM",
-                                              "DURATION_FROMCLICKTOCREATION",
-                                              "TIME_CLICKED")]
-      })
-      p <- ggplot2::ggplot(data = rv$selecteddata, aes_string(x = "referrer"))
-      p <- p + ggplot2::geom_bar()
-      print(p)
-      
-      
-      
-    }
+    
   })
   
-  
-  
-  
+  output$numcommunities <- renderPlot({
+    
+    if(!is.null(rv$iterated.results)) {
+      
+      #stopApp(rv$iterated.results)
+      d <- ggplot2::ggplot(data = rv$iterated.results) + ggplot2::geom_line(aes_string(x = "Filter_Level", y = "Number_of_Domains"), size = 1.3) +
+           ggplot2::ggtitle("Number of Web Domains Remaining as filter changes") +
+           ggplot2::scale_x_continuous(breaks = filters, labels = filters) +
+           ggthemes::theme_economist_white(base_size = 14)
+      
+      print(d)
+          }
+    
+  })
+    
 }
   
   

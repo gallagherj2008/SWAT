@@ -17,12 +17,13 @@ filterCopurchaseMatrix <- function(copurchase.matrix, n = 3, filterlevel = 0.05)
   
   filtervalue <- SWAT::getTopNvalues(copurchase.matrix) %>% mean()*filterlevel
   
-
+  Matrix::diag(copurchase.matrix) <- 0
+  
   websites <- rownames(copurchase.matrix)
   
   mat <- SWAT::sparseToMatrix(copurchase.matrix) %>% as.data.frame
   
-  mat <- mat %>% dplyr::filter_("x" > filtervalue)
+  mat <- mat %>% dplyr::filter(mat$x > filtervalue)
 
   
    filteredcopurchase <- Matrix::sparseMatrix(i = mat[,1], j = mat[,2], x = mat[,3], dims = c(length(websites),length(websites)))

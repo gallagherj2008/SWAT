@@ -5,6 +5,7 @@ library(igraph)
 library(Matrix)
 library(lubridate)
 library(DT)
+library(ggthemes)
 
 #data('webclickexample')
 #clicks <- webclickexample
