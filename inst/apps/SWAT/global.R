@@ -19,6 +19,5 @@ max.filter <- 0.10
 filter.step <- 0.01
 
 filters <- seq(from = min.filter, to = max.filter, by = filter.step)
-filteredcommunities <- list()
-
+filteredcommunities <- vector(mode = "list", length = length(filters))
 #initialize the dataframe for plots

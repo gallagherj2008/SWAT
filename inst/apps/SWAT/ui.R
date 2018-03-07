@@ -1,8 +1,11 @@
-ui <- fluidPage(title = 'Shortened web Link Analysis Tool',
-                theme = shinythemes::shinytheme('flatly'),
+ui <- navbarPage(title = 'Shortened web Link Analysis Tool',
+                theme = shinythemes::shinytheme('journal'),
+                #shiny::includeCSS("./www/custom.css"),
                 
-               mainPanel(width = 9,
-                            tabsetPanel(
+               #mainPanel(width = 9,
+                            #tabsetPanel(
+                              tabPanel(title = "Instructions",
+                                       htmlOutput('instructions')),
                               tabPanel(title = "Load Data",
                                        fileInput("file1", "Choose CSV file",
                                                  multiple = F,
@@ -14,7 +17,8 @@ ui <- fluidPage(title = 'Shortened web Link Analysis Tool',
                                        tags$hr(),
                                        dataTableOutput('table')),
                               tabPanel(title = 'Exploratory Data Analysis',
-                                       selectInput("plotcolumn",
+                                       sidebarPanel(width = 3,
+                                                    selectInput("plotcolumn",
                                                    label = "Select column for building the chart",
                                                    choices = c("referrer",
                                                                "VENDORNAME_OPERATINGSYSTEM",
@@ -33,20 +37,42 @@ ui <- fluidPage(title = 'Shortened web Link Analysis Tool',
                                                                "dodge")),
                                        sliderInput("filterlevel",
                                                    label = "Filter out low levels",
-                                                   min = 0, max = 5000, step = 500, value = 500),
+                                                   min = 0, max = 2000, step = 250, value = 500),
                                        sliderInput("agefilter",
                                                    label = "Max Link Age to show (in days)",
-                                                   min = 1, max = 5, step = 1, value = 2),
-                                       plotOutput('barchart'),
-                                       plotOutput('densityplot')),
-                              tabPanel(title = "Community Detection",
+                                                   min = 1, max = 5, step = 1, value = 2)),
+                                       mainPanel(width = 6,
+                                                 plotOutput('barchart'),
+                                       plotOutput('densityplot'))),
+                              
+               tabPanel(title = "Community Detection",
                                        actionButton("community", "Conduct Community Detection"),
                                        fluidRow(
                                          column(12, plotOutput('modularity')),
                                          column(12, plotOutput('numcommunities')))
                               
                               
+                              ),
+               
+                              tabPanel(title = "Domains in Tables",
+                                       sidebarPanel(width = 3, 
+                                                   sliderInput("commfilter",
+                                                   label = "What filter should be applied",
+                                                   min = 1,
+                                                   max = 10, 
+                                                   step = 1,
+                                                   value = 2),
+                                                   sliderInput("commstodisplay",
+                                                   label = "Communities to display",
+                                                   min = 1,
+                                                   max = 10,
+                                                   step = 10,
+                                                   value = 2)),
+                                      mainPanel(width = 9,  
+                                                plotOutput("domainsincommunities"),
+                                                plotOutput("tables"))
+                                      )
+               
                               )
-                              )
-                         )
-)
+                         #)
+#)
