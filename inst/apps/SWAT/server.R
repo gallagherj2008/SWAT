@@ -125,7 +125,7 @@ server <- function(input, output, session) {
 
   
 
-  output$table <- renderDataTable({
+  output$table <- shiny::renderDataTable({
 
     rv$clicks
 
