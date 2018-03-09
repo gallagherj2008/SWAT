@@ -1,7 +1,7 @@
 SWAT - Shortened Web-link Analysis Tool
 ================
 James Gallagher
-January 16, 2018
+9 March 2018
 
 <!-- don't edit README.md go to README.Rmd instead -->
 [![Build Status](https://travis-ci.org/gallagherj2008/SWAT.svg?branch=master)](https://travis-ci.org/gallagherj2008/SWAT)
@@ -56,7 +56,7 @@ Including Plots
 <td>Multiple-Tabs</td>
 <td>The tool will have three tabs for navigating between the outputs</td>
 <td>High</td>
-<td>Not Finished</td>
+<td>Finished</td>
 <td>This feature clearly separates the information and indicates what information is to be placed where</td>
 <td>None</td>
 <td>None</td>
@@ -68,7 +68,7 @@ Including Plots
 <td>Exploratory Data Analysis Plots</td>
 <td>Provide basic plots on overall data set</td>
 <td>High</td>
-<td>Not Finished</td>
+<td>Finished</td>
 <td>This provides the user an overall understanding of the data and the information environment of the selected area; can be used to compare with the identified communities later</td>
 <td>Data set, what to be plotted (hardware type, OS, time, etc)</td>
 <td>Bar chart or Density Plot based on inputs</td>
@@ -80,7 +80,8 @@ Including Plots
 <td>Filter/Modularity plot</td>
 <td>Line Plot of community modularity score as filter level increases</td>
 <td>High</td>
-<td>Not Finished</td>
+<td>Finished</td>
+<td>Allows user to see the strength of cluster association as an iterative filtering level is applied to the data. The values on this chart are used to help the user select the best filtering level which removes spurious connections between domains</td>
 <td>Dataset</td>
 <td>Line chart</td>
 <td>Determine which filter level to use in future analysis</td>
@@ -91,10 +92,11 @@ Including Plots
 <td>Display web domains in communities</td>
 <td>After filter applied, web domains are clustered based on. The remaining domains are then displayed by cluster</td>
 <td>High</td>
-<td>Not Finished</td>
+<td>Finished</td>
 <td>This is what allows the user to identify which web domains are clustered together</td>
-<td>Dataset, desired filter level</td>
-<td>2 column table, 1st column is web domains, 2nd column is number of clicks from that dataset</td>
+<td>Dataset, desired filter level, Community selector</td>
+<td>Line Graph showing number of web domains per cluster and a 2 column table, 1st column is web domains, 2nd column is number of clicks from that dataset</td>
+<td>To help user identify which web domains were clustered together</td>
 <td>Completed prior to deadline</td>
 <td>Current Version</td>
 </tr>
