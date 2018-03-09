@@ -157,7 +157,7 @@ server <- function(input, output, session) {
    p <- ggplot2::ggplot(data = rv$selecteddata, aes_string(x = input$plotcolumn))
    p <- p + ggplot2::geom_bar(aes_string(fill = input$fillcolumn),
                         position = input$chartstyle,
-                        show.legend = F) +
+                        show.legend = T) +
      ggplot2::ylab("Count")
    p <- p + ggthemes::theme_base()
     print(p)
