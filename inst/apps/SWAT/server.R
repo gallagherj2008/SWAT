@@ -2,8 +2,6 @@ server <- function(input, output, session) {
   
   rv <- reactiveValues()
 
-
-  
   observeEvent({
     input$process},
     {
@@ -29,8 +27,37 @@ server <- function(input, output, session) {
       }
     })
   
-  observeEvent({input$community},
-  {validate(
+  observe({
+    if (!is.null(rv$clicks)) {
+      
+      rv$edatable <- dplyr::summarise(rv$clicks,
+                                      `Number of Clicks` = n(),
+                                      `Unique Domains` = n_distinct(rv$clicks$AUTHORITY_URI),
+                                      `Period Begin Time` = as.character(lubridate::ymd_hms(min(rv$clicks$TIME_CLICKED))),
+                                      `Period End Time` = as.character(lubridate::ymd_hms(max(rv$clicks$TIME_CLICKED))))
+    }
+  })
+  
+  observe({
+    
+    if(!is.null(rv$clicks)) {
+      rv$top5domains <- head(sort(table(rv$clicks$AUTHORITY_URI), decreasing = T), n = 5)
+      # rv$top5locations <- head(sort(table(rv$clicks$GEOREGIONCODE), decreasing = T), n = 5)                                          
+      
+    }
+  })
+  
+  observe({
+    
+    if(!is.null(rv$clicks)) {
+      rv$top5locations <- head(sort(table(rv$clicks$GEOREGIONCODE), decreasing = T), n = 5)                                          
+    } 
+  })
+  
+  
+  observeEvent({input$communitybutton},
+  {
+    validate(
     need(!is.null(rv$clicks), label = "A dataset"))
     rv$iterated.results <- dplyr::data_frame("Filter_Level" = seq(from = min.filter, to = max.filter, by = filter.step),
                                         "Number_of_Communities" =seq(from = min.filter, to = max.filter, by = filter.step), 
@@ -38,7 +65,7 @@ server <- function(input, output, session) {
                                         "Number_of_Domains" = seq(from = min.filter, to = max.filter, by = filter.step))
   rv$adjacencymatrix <- SWAT:::buildAdjacencyMatrix(rv$clicks)
   rv$copurchase.matrix <- t(rv$adjacencymatrix) %*% rv$adjacencymatrix
-
+  rv$filteredcommunities <- vector(mode = "list", length = 10L)
   for (i in seq(1,length(filters))) {
     
     rv$copurchase.matrix1 <- SWAT:::filterCopurchaseMatrix(rv$copurchase.matrix, n = 3, filterlevel = filters[i])
@@ -48,31 +75,64 @@ server <- function(input, output, session) {
     rv$iterated.results$Number_of_Domains[i] <- rv$filteredCommunities %>% igraph::sizes() %>% sum()
     rv$filteredcommunities[[i]] <- rv$filteredCommunities #note the capitalization difference...this assigns the communities object to the list generated previously
   } 
-    
+     #stopApp(rv$filteredcommunities)
     
   })
   
-  
-    
-    observe({
+
+  observe({
+
+    req(rv$filteredcommunities)
+
+      rv$filteredCommunitiesforplots <- rv$filteredcommunities[[input$commfilter]]
+      rv$domainsincommunities <- as.data.frame(sort(sizes(rv$filteredCommunitiesforplots), decreasing = T))
       
-      if(!is.null(rv$iterated.results)) {  
-      rv$filteredCommunities <- rv$filteredcommunities[[input$commfilter]]
-      rv$domainsincommunities <- as.data.frame(sort(sizes(rv$filteredCommunities), decreasing = T))
       
-      #stopApp(rv$domainsincommunities)
       updateSliderInput(session = session, 
                         "commstodisplay",
                         min = 1,
-                        max = length(rv$domainsincommunities$Freq),
-                        step = 1,
-                        value = 2)
-      
-        }
-      
-        
-      })
+                        max = length(rv$filteredCommunitiesforplots),
+                        step = 1, 
+                        value = 1)
+    
+    rv$filteredCommunitiesfortables <- rv$filteredcommunities[[input$commfilter]]
+    rv$filteredCommunitiesfortables1 <- rv$filteredCommunitiesfortables[1:length(rv$filteredCommunitiesfortables)]
+    rv$filteredCommunitiesfortables2 <- rv$filteredCommunitiesfortables1[order(sapply(rv$filteredCommunitiesfortables1,length),decreasing=T)]
+    }, priority = 1)
   
+  observeEvent({input$seeTable},{
+    
+    req(rv$filteredcommunities)
+            #stopApp(rv$commtables)
+      # rv$filteredCommunitiesfortables <- rv$filteredcommunities[[input$commfilter]]
+     tryCatch({ 
+      
+       
+      #print(length(rv$filteredCommunitiesfortables))
+      #print(input$commstodisplay)
+       print(rv$filteredCommunitiesfortables2[[input$commstodisplay]])
+      rv$commtable <- as.data.frame(table(rv$clicks[rv$clicks$AUTHORITY_URI %in% as.vector(rv$filteredCommunitiesfortables2[[input$commstodisplay]]),"AUTHORITY_URI"]))
+      colnames(rv$commtable) <- c("Domains","Clicks")
+      rv$commtables <- rv$commtable[order(rv$commtable$Clicks, decreasing = T),]
+      
+      #print(rv$commtables)
+      #rv$commtables <- head(as.vector(rv$filteredCommunitiesfortables[[input$commstodisplay]]))
+     },
+     error = function(err) {
+       rv$filteredCommunitiesfortables1 <- rv$filteredCommunitiesfortables[order(sapply(rv$filteredCommunitiesfortables,length),decreasing=T)]
+       #print(length(rv$filteredCommunitiesfortables))
+       #print(input$commstodisplay)
+       rv$commtables <- as.data.frame(table(rv$clicks[rv$clicks$AUTHORITY_URI %in% as.vector(rv$filteredCommunitiesfortables[[1]]),"AUTHORITY_URI"]),col.names = c("Domain", "Clicks"))
+       rv$commtables <- sort(rv$commtables$Clicks, decreasing = T)
+       print(rv$commtables)
+       
+     })
+
+
+  })
+
+  
+
   output$table <- renderDataTable({
 
     rv$clicks
@@ -87,6 +147,7 @@ server <- function(input, output, session) {
     observe({
     rv$clicks <- as.data.frame(rv$clicks)
     })
+    
   if (input$plotcolumn %in% c("VENDORNAME_OPERATINGSYSTEM", "TYPE_HARDWAREPLATFORM","referrer")) {
     
     observe({
@@ -110,7 +171,7 @@ server <- function(input, output, session) {
     print(p)
 
 
-  } else {
+  } else if (input$plotcolumn %in% c("DURATION_FROMCLICKTOCREATION", "TIME_CLICKED")) {
     
     #updateSliderInput(session, "agefilter", max = round(max(rv$selecteddata$DURATION_FROMCLICKTOCREATION),digits = 0), step = 24, min = 1)
     
@@ -147,11 +208,36 @@ server <- function(input, output, session) {
     print(p)
 
 
-   # stopApp(returnValue = input$plotcolumn)
+
 
   }
   })
+  
+  
+  output$exploratorydata <- shiny::renderTable({
 
+
+    rv$edatable
+
+  })
+
+  output$top5webdomains <- shiny::renderTable({
+
+    rv$top5domains
+
+  })
+
+  
+  output$top5locations <- shiny::renderTable({
+
+
+    rv$top5locations
+
+
+  })
+  
+  
+  
   output$modularity <- renderPlot({
     
     
@@ -199,26 +285,7 @@ server <- function(input, output, session) {
   output$domainsincommunities <- renderPlot({
     
     
-    # if(!is.null(rv$iterated.results)) {
-    #   
-    #   observe({
-    #       
-    #       
-    #       rv$filteredCommunities <- rv$filteredcommunities[[input$commfilter]]
-    #       rv$domainsincommunities <- as.data.frame(sort(sizes(rv$filteredCommunities), decreasing = T))
-    #       
-    #       #stopApp(rv$domainsincommunities)
-    #       updateSliderInput(session = session, 
-    #                         "commstodisplay",
-    #                         min = 1,
-    #                         max = length(rv$domainsincommunities$Freq),
-    #                         step = 1,
-    #                         value = 2)
-    #       
-    #       
-    #       
-    #     })
-    #     
+      
       
       
       e <- ggplot2::ggplot(data = rv$domainsincommunities, aes_string(x = 1:length(rv$domainsincommunities$Freq), y = "Freq")) +
@@ -232,49 +299,23 @@ server <- function(input, output, session) {
       
       print(e)
       
-    #}
+   
     
     
   })
   
   
-#   output$tables <- renderPlot({
-# 
-# 
-# #     if(!is.null(rv$iterated.results)) {
-# # 
-# # 
-#     observe({
-#      rv$filteredCommunitiesfortables <- rv$filteredcommunities[[input$commfilter]]
-#     rv$filteredCommunitiesfortables <- rv$filteredCommunitiesfortables[order(sapply(rv$filteredCommunitiesfortables,length),decreasing=T)]
-# 
-#     rv$domains <- as.vector(rv$filteredCommunitiesfortables[[1]])
-# 
-#     # if (input$commstodisplay >= 2) {
-#     #   for (i in 2:input$commstodisplay) {
-#     #
-#     #     rv$domains <- append(rv$domains, as.vector(rv$filteredCommunitiesfortables[[i]]))
-#     #
-#     #     }
-#     # }
-#     #
-#     # rv$clicksreduced <- dplyr::filter(rv$clicks, rv$clicks$AUTHORITY_URI %in% names)
-# 
-#     for (i in 1:input$commstodisplay) {
-# 
-# 
-#       rv$tables[[i]] <- table(which(rv$clicks$AUTHORITY_URI %in% rv$filteredCommunitiesfortables[[i]]))
-# 
-# 
-# 
-# 
-#     }
-# 
-#     })
-#     stopApp(rv$tables)
-#       #rv$tables <- vector(mode = "list", length = input$commstodisplay)
-# 
-#   })
+  output$commtables <- shiny::renderDataTable({
+
+
+     if(!is.null(rv$iterated.results)) {
+
+
+        rv$commtables
+     }
+
+
+  })
   
   
   

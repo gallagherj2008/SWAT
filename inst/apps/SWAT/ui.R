@@ -1,5 +1,13 @@
-ui <- navbarPage(title = 'Shortened web Link Analysis Tool',
+ui <- tagList(tags$style(type="text/css",
+              ".shiny-output-error { visibility: hidden; }",
+              ".shiny-output-error:before { visibility: hidden; }",
+              ".shiny-output-warning {visibility: hidden; }",
+              ".shiny-output {visibility: hidden; }",
+              ".shiny-output-warning:before { visibility:hidden; }"),
+  navbarPage(title = 'Shortened web Link Analysis Tool',
                 theme = shinythemes::shinytheme('journal'),
+                
+
                 #shiny::includeCSS("./www/custom.css"),
                 
                #mainPanel(width = 9,
@@ -17,44 +25,52 @@ ui <- navbarPage(title = 'Shortened web Link Analysis Tool',
                                        tags$hr(),
                                        dataTableOutput('table')),
                               tabPanel(title = 'Exploratory Data Analysis',
-                                       sidebarPanel(width = 3,
-                                                    selectInput("plotcolumn",
+                                       fluidRow(
+
+                                         column(width = 2,
+                                                selectInput("plotcolumn",
                                                    label = "Select column for building the chart",
                                                    choices = c("referrer",
                                                                "VENDORNAME_OPERATINGSYSTEM",
-                                                               "TYPE_HARDWAREPLATFORM", 
+                                                               "TYPE_HARDWAREPLATFORM",
                                                                "DURATION_FROMCLICKTOCREATION",
-                                                               "TIME_CLICKED")),
+                                                               "TIME_CLICKED"))),
+                                         column(width = 2,
                                        #colnames(clicks)),
                                        selectInput("fillcolumn",
                                                    label = "Column fill option:",
                                                    choices = c("referrer",
                                                                "VENDORNAME_OPERATINGSYSTEM",
-                                                               "TYPE_HARDWAREPLATFORM")),
+                                                               "TYPE_HARDWAREPLATFORM"))),
+                                       column(width = 2,
                                        selectInput("chartstyle",
                                                    label = "Should the bar chart be stacked or side-by-side",
                                                    choices = c("stack",
-                                                               "dodge")),
+                                                               "dodge"))),
+                                       column(width = 2,
                                        sliderInput("filterlevel",
                                                    label = "Filter out low levels",
-                                                   min = 0, max = 2000, step = 250, value = 500),
+                                                   min = 0, max = 2000, step = 250, value = 500)),
+                                       column(width = 2,
                                        sliderInput("agefilter",
                                                    label = "Max Link Age to show (in days)",
-                                                   min = 1, max = 5, step = 1, value = 2)),
-                                       mainPanel(width = 6,
-                                                 plotOutput('barchart'),
-                                       plotOutput('densityplot'))),
-                              
+                                                   min = 1, max = 5, step = 1, value = 2))),
+                                       tags$hr(),
+                                       fluidRow(align = "center", plotOutput('barchart', width = "600px")),
+                                                 tags$hr(),
+                                      fixedRow(column(width = 4, tableOutput('exploratorydata')),
+                                              #column(width = 4, tableOutput("top5webdomains")),
+                                              column(width = 4, tableOutput("top5locations")))),
+                                      #fluidRow(tableOutput('exploratorydata'),
+                                      #         tableOutput("top5webdomains"),
+                                      #         tableOutput("top5locations"))),
                tabPanel(title = "Community Detection",
-                                       actionButton("community", "Conduct Community Detection"),
-                                       fluidRow(
-                                         column(12, plotOutput('modularity')),
-                                         column(12, plotOutput('numcommunities')))
+                                       fluidRow(align = "center", actionButton("communitybutton", "Conduct Community Detection")),
+                                      tags$hr(),
+                                       fluidRow(align = "center", plotOutput('modularity', width = "800px")),
+                                       fluidRow(align = "center", plotOutput('numcommunities', width = "800px"))),
                               
-                              
-                              ),
-               
-                              tabPanel(title = "Domains in Tables",
+               tabPanel(title = "Community Domains",
                                        sidebarPanel(width = 3, 
                                                    sliderInput("commfilter",
                                                    label = "What filter should be applied",
@@ -67,12 +83,16 @@ ui <- navbarPage(title = 'Shortened web Link Analysis Tool',
                                                    min = 1,
                                                    max = 10,
                                                    step = 10,
-                                                   value = 2)),
+                                                   value = 2),
+                                                   actionButton("seeTable", "Display Domain Table")),
                                       mainPanel(width = 9,  
-                                                plotOutput("domainsincommunities"),
-                                                plotOutput("tables"))
+                                                fluidRow(plotOutput("domainsincommunities", width = "800px"), align = "center"),
+                                                tags$hr(),
+                                                fluidRow(shiny::dataTableOutput("commtables"), align = "center")
                                       )
                
                               )
-                         #)
-#)
+                         )
+
+)
+
