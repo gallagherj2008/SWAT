@@ -154,6 +154,7 @@ server <- function(input, output, session) {
 
     #rv$selecteddata <- rv$clicks[,c("referrer","VENDORNAME_OPERATINGSYSTEM","DURATION_FROMCLICKTOCREATION","TIME_CLICKED")]
     #stopApp(rv$selecteddata)
+    shiny::req(rv$selecteddata$referrer, cancelOutput = T)
    p <- ggplot2::ggplot(data = rv$selecteddata, aes_string(x = input$plotcolumn))
    p <- p + ggplot2::geom_bar(aes_string(fill = input$fillcolumn),
                         position = input$chartstyle,
@@ -163,7 +164,9 @@ server <- function(input, output, session) {
     print(p)
 
 
-  } else if (input$plotcolumn %in% c("DURATION_FROMCLICKTOCREATION", "TIME_CLICKED")) {
+  } 
+    
+    if (input$plotcolumn %in% c("DURATION_FROMCLICKTOCREATION", "TIME_CLICKED")) {
     
     #updateSliderInput(session, "agefilter", max = round(max(rv$selecteddata$DURATION_FROMCLICKTOCREATION),digits = 0), step = 24, min = 1)
     
@@ -181,8 +184,10 @@ server <- function(input, output, session) {
     if (input$plotcolumn == "DURATION_FROMCLICKTOCREATION") {
 
     observe({
-      rv$selecteddata <- rv$selecteddata1[rv$selecteddata1[,input$plotcolumn] < input$agefilter*24, ]
-
+      #rv$selecteddata2 <- rv$selecteddata1
+      suppressWarnings({
+      rv$selecteddata2 <- rv$selecteddata1[rv$selecteddata1[,input$plotcolumn] < input$agefilter*24, ]
+      })
     })
 
       #stopApp(rv$selecteddata$DURATION_FROMCLICKTOCREATION)
@@ -190,11 +195,13 @@ server <- function(input, output, session) {
       
     else {
       
-      rv$selecteddata <- rv$selecteddata1
+      rv$selecteddata2 <- rv$selecteddata1
       
     }
     
-    p <- ggplot2::ggplot(data = rv$selecteddata, aes_string(x = input$plotcolumn))
+      
+      shiny::req(rv$selecteddata2$referrer, cancelOutput = T)
+    p <- ggplot2::ggplot(data = rv$selecteddata2, aes_string(x = input$plotcolumn))
     p <- p + ggplot2::geom_density(aes_string(group = input$fillcolumn, color = input$fillcolumn))
     p <- p + ggthemes::theme_base()
     print(p)
