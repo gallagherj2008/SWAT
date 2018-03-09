@@ -108,24 +108,16 @@ server <- function(input, output, session) {
      tryCatch({ 
       
        
-      #print(length(rv$filteredCommunitiesfortables))
-      #print(input$commstodisplay)
-       print(rv$filteredCommunitiesfortables2[[input$commstodisplay]])
+
       rv$commtable <- as.data.frame(table(rv$clicks[rv$clicks$AUTHORITY_URI %in% as.vector(rv$filteredCommunitiesfortables2[[input$commstodisplay]]),"AUTHORITY_URI"]))
       colnames(rv$commtable) <- c("Domains","Clicks")
       rv$commtables <- rv$commtable[order(rv$commtable$Clicks, decreasing = T),]
       
-      #print(rv$commtables)
-      #rv$commtables <- head(as.vector(rv$filteredCommunitiesfortables[[input$commstodisplay]]))
      },
      error = function(err) {
        rv$filteredCommunitiesfortables1 <- rv$filteredCommunitiesfortables[order(sapply(rv$filteredCommunitiesfortables,length),decreasing=T)]
-       #print(length(rv$filteredCommunitiesfortables))
-       #print(input$commstodisplay)
        rv$commtables <- as.data.frame(table(rv$clicks[rv$clicks$AUTHORITY_URI %in% as.vector(rv$filteredCommunitiesfortables[[1]]),"AUTHORITY_URI"]),col.names = c("Domain", "Clicks"))
        rv$commtables <- sort(rv$commtables$Clicks, decreasing = T)
-       print(rv$commtables)
-       
      })
 
 
