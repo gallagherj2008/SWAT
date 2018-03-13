@@ -5,5 +5,5 @@
 ^.*\src\*.o
 ^.*\src\*.dll
 ^.*\README.Rmd
-^.*\inst\paper\paper.*$$
-^.*\inst\ButtReview\ButtSwatReview.*$
+^.*/inst/paper$$
+^.*/inst/ButtReview$
