@@ -6,3 +6,4 @@
 ^.*\src\*.dll
 ^.*\README.Rmd
 ^.*\inst\paper
+^.*\inst\ButtReview
