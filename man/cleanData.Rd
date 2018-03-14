@@ -9,7 +9,7 @@ cleanData(data, matchvector)
 \arguments{
 \item{data}{A dataframe pulled from the webclick data}
 
-\item{matchvector}{a string vector used to identify topics of link clicks}
+\item{matchvector}{a vector of strings used to identify topics of link clicks}
 }
 \value{
 datanoads a dataframe with ads removed and prepared for analysis

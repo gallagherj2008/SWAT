@@ -12,9 +12,9 @@
 #' 
 #' 
 loadWebClicks <- function(data.location) {
-  
+  suppressMessages(
   data <- readr::read_csv(data.location, progress = F)
-  
+  )
   column.names <- colnames(data)
   
   nulled.names <- c("APPLICATIONPROTOCOL_REFERRER", 
