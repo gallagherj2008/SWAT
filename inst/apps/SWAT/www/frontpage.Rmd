@@ -14,9 +14,18 @@ intended to be navigated to sequentially.
 ## Load Data
 
 On this tab is the file input box. The user will select a 
-file from their computer for uploading. The maximum file size
-is currently 500MB. After selecting a file, the user will
-select "Upload and Clean Data". After clicking this button,
+file from their computer for uploading. The file must contain the following column names:
+
+* AUTHORITY_URI_REFERRER
+* AUTHORITY_URI
+* referrer
+* VENDORNAME_OPERATINGSYSTEM
+* TYPE_HARDWAREPLATFORM
+* TIMESTAMP_INIT
+* DURATION_FROMCLICKTOCREATION
+
+The maximum file size is currently 500MB. After selecting a file, the user will
+select `"Upload and Clean Data"`. After clicking this button,
 the app will import the data and generate a data table
 (similar to an excel spreadsheet) of the uploaded dataset.
 Here, the user can search for terms contained in the data or
@@ -57,7 +66,7 @@ After clicking the conduct community detection, the app will
 build the co-user matrix (a matrix that connects web domains
 to other web domains by common users). It will then build the
 graph and conduct community detection after applying an iterative filter.
-At each step of the filtering, the graph's modularity is calculated.
+At each step of the filtering, the modularity of the graph is calculated.
 The community structure that generates the greatest modularity
 is the preferred filter level. The second plot informs the user
 as to how many domains were filtered out of the data set to
@@ -71,3 +80,29 @@ which web domains were most commonly accessed together.
 Finally, a table can be generated showing which web domains are
 in the selected cluster and how many total clicks were directed
 to those web domains. 
+
+## Plots by Community
+
+This tab generates bar charts and time density plots based on
+user input for building the chart. If  the user selects:
+
+* Referrer
+* OperatingSystem
+* HardwarePlatform
+
+The app will build the associated bar chart. 
+
+If the user selects:
+
+* TimeClicked
+* DurationFromClickToCreation
+
+a time-density plot will be generated. This density plot shows
+the distribution of either link ages (DurationFromClickToCreation)
+or when users actually clicked on the link (TimeClicked). 
+Creation indicates the time that the link shortening service first
+generated that shortened link. A final functionality on this tab
+is the ability to change the filter associated with the co-user matrix
+and the number of communities. The user can determine the optimal co-user matrix filter 
+level from the community detection tab and the number of communities from 
+the community domains tab.
