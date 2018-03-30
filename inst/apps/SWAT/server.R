@@ -206,7 +206,7 @@ server <- function(input, output, session) {
       p <- ggplot2::ggplot(data = rv$selecteddata2, aes_string(x = input$plotcolumn))+
         ggplot2::geom_density(aes_string(group = input$fillcolumn, color = input$fillcolumn))+
         ggthemes::theme_base()+
-        ggplot2::xlab("Duration from Click to Creation (Hours)") +
+        ggplot2::xlab("Time between Creation and Click (Hrs)") +
         ggplot2::ylab("Density") 
       print(p)
       
@@ -418,7 +418,7 @@ server <- function(input, output, session) {
       q<-ggplot(data= rv$dataformeasures4, ggplot2::aes(x= rv$dataformeasures4$DURATION_FROMCLICKTOCREATION,group=rv$dataformeasures4$community, color = rv$dataformeasures4$community )) + 
         ggplot2::geom_density(size = 1.3) +
         ggplot2::ggtitle("Distribution of Duration from Click to Creation \nby Community") + 
-        ggplot2::xlab("Duration from Click to Creation") +
+        ggplot2::xlab("Time between Creation and Click (Hrs)") +
         ggplot2::ylab("Density") +
         ggplot2::guides(fill=guide_legend(title=NULL)) +
         ggplot2::theme_minimal(base_size = 24) +
