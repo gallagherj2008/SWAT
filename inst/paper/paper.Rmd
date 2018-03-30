@@ -23,7 +23,6 @@ tags:
 - community detection
 affiliations:
 - index: 1
-  name: Air Force Institute of Technology 
 keep_md: yes
 ---
 
