@@ -13,7 +13,7 @@
 #' 
 loadWebClicks <- function(data.location) {
   suppressMessages(
-  data <- readr::read_csv(data.location, progress = F)
+  data <- readr::read_csv(data.location, progress = F, guess_max=100000)
   )
   column.names <- colnames(data)
   
