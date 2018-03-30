@@ -10,6 +10,6 @@ The SWAT Package provides a convenient wrapper for the
 SWAT Shiny App. To load the app, call `SWAT::run_my_app("SWAT")`
 }
 \author{
-\strong{Maintainer}: James Developer \email{james.c.gallagher@gmail.com}
+\strong{Maintainer}: James Gallagher \email{james.c.gallagher@gmail.com}
 
 }
